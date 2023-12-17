@@ -1,0 +1,24 @@
+{
+    "linux": { 
+     "x64": {
+      "jdk": {
+       "17": {
+        "tar.gz": {
+         "checksum": "00000000000000000000000000000000",
+         "checksum_sha256": "502107296e925e6323c368017e74a5cef51f3664f72c5a1926e174319d1d39fd",
+         "resource": "/download/sapmachine-17.0.9/sapmachine-jdk-17.0.9_linux-x64_bin.tar.gz"
+       }
+      }
+     },
+     "jre": {
+        "17": {
+         "tar.gz": {
+          "checksum": "00000000000000000000000000000001",
+          "checksum_sha256": "869e556c33b8743ed57ec8a40b4aeb63e3dd7d65f36178445b88882c91ac901b",
+          "resource": "/download/sapmachine-17.0.9/sapmachine-jre-17.0.9_linux-x64_bin.tar.gz"
+        }
+       }
+      }
+    }
+   }
+}
