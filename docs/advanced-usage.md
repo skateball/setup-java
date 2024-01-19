@@ -8,7 +8,7 @@
   - [Amazon Corretto](#Amazon-Corretto)
   - [Oracle](#Oracle)
   - [Alibaba Dragonwell](#Alibaba-Dragonwell)
-  - [SapMachine](docs/advanced-usage.md#SapMachine)
+  - [SapMachine](#SapMachine)
 - [Installing custom Java package type](#Installing-custom-Java-package-type)
 - [Installing custom Java architecture](#Installing-custom-Java-architecture)
 - [Installing custom Java distribution from local file](#Installing-Java-from-local-file)
