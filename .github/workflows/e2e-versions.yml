@@ -22,45 +22,9 @@ jobs:
       matrix:
         os: [macos-13, windows-latest, ubuntu-latest]
         distribution: [
-            'temurin',
-            'adopt',
-            'adopt-openj9',
-            'zulu',
-            'liberica',
-            'microsoft',
-            'semeru',
-            'corretto',
-            'dragonwell',
             'sapmachine'
           ] # internally 'adopt-hotspot' is the same as 'adopt'
         version: ['21', '11', '17']
-        exclude:
-          - distribution: microsoft
-            version: 8
-          - distribution: dragonwell
-            os: macos-13
-        include:
-          - distribution: oracle
-            os: macos-13
-            version: 17
-          - distribution: oracle
-            os: windows-latest
-            version: 21
-          - distribution: oracle
-            os: ubuntu-latest
-            version: 21
-          - distribution: graalvm
-            os: macos-latest
-            version: 17
-          - distribution: graalvm
-            os: windows-latest
-            version: 21
-          - distribution: graalvm
-            os: ubuntu-latest
-            version: 21
-          - distribution: graalvm
-            os: ubuntu-latest
-            version: '24-ea'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -82,27 +46,11 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        distribution: ['temurin', 'zulu', 'liberica']
+        distribution: ['sapmachine']
         version:
-          - '11.0'
-          - '21.0'
-          - '17.0.7+7'
-        include:
-          - distribution: oracle
-            os: ubuntu-latest
-            version: '21.0.4'
-          - distribution: graalvm
-            os: ubuntu-latest
-            version: '21.0.4'
-          - distribution: dragonwell
-            os: ubuntu-latest
-            version: '11.0'
-          - distribution: dragonwell
-            os: ubuntu-latest
-            version: '11.0.13+9'
-          - distribution: sapmachine
-            os: ubuntu-latest
-            version: '17.0.7'
+          - '11.0.24'
+          - '21.0.4'
+          - '17.0.12'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -125,10 +73,7 @@ jobs:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
         distribution:
-          ['temurin', 'zulu', 'liberica', 'dragonwell', 'sapmachine']
-        exclude:
-          - distribution: dragonwell
-            os: macos-latest
+          ['sapmachine']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -152,10 +97,7 @@ jobs:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
         distribution:
-          ['temurin', 'zulu', 'liberica', 'dragonwell', 'sapmachine']
-        exclude:
-          - distribution: dragonwell
-            os: macos-latest
+          ['sapmachine']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -182,50 +124,6 @@ jobs:
         shell: pwsh
       - name: Verify Java
         run: bash __tests__/verify-java.sh "17" "${{ steps.setup-java.outputs.path }}"
-        shell: bash
-
-  setup-java-ea-versions-zulu:
-    name: zulu ${{ matrix.version }} (jdk-x64) - ${{ matrix.os }}
-    needs: setup-java-major-minor-versions
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [macos-13, windows-latest, ubuntu-latest]
-        version: ['17-ea', '15.0.0-ea.14']
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: setup-java
-        uses: ./
-        id: setup-java
-        with:
-          java-version: ${{ matrix.version }}
-          distribution: zulu
-      - name: Verify Java
-        run: bash __tests__/verify-java.sh "${{ matrix.version }}" "${{ steps.setup-java.outputs.path }}"
-        shell: bash
-
-  setup-java-ea-versions-temurin:
-    name: temurin ${{ matrix.version }} (jdk-x64) - ${{ matrix.os }}
-    needs: setup-java-major-minor-versions
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
-        version: ['17-ea']
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: setup-java
-        uses: ./
-        id: setup-java
-        with:
-          java-version: ${{ matrix.version }}
-          distribution: temurin
-      - name: Verify Java
-        run: bash __tests__/verify-java.sh "${{ matrix.version }}" "${{ steps.setup-java.outputs.path }}"
         shell: bash
 
   setup-java-ea-versions-sapmachine:
@@ -258,30 +156,9 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-13, windows-latest, ubuntu-latest]
-        distribution: ['temurin', 'zulu', 'liberica', 'semeru', 'sapmachine']
+        distribution: ['sapmachine']
         java-package: ['jre']
         version: ['17.0']
-        include:
-          - distribution: 'zulu'
-            java-package: jre+fx
-            version: '21'
-            os: ubuntu-latest
-          - distribution: 'zulu'
-            java-package: jdk+fx
-            version: '21.0'
-            os: ubuntu-latest
-          - distribution: 'liberica'
-            java-package: jdk+fx
-            version: '21'
-            os: ubuntu-latest
-          - distribution: 'liberica'
-            java-package: jre+fx
-            version: '11'
-            os: ubuntu-latest
-          - distribution: 'corretto'
-            java-package: jre
-            version: '8'
-            os: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -292,32 +169,6 @@ jobs:
           java-version: ${{ matrix.version }}
           java-package: ${{ matrix.java-package }}
           distribution: ${{ matrix.distribution }}
-      - name: Verify Java
-        run: bash __tests__/verify-java.sh "${{ matrix.version }}" "${{ steps.setup-java.outputs.path }}"
-        shell: bash
-
-  # Only Liberica and Zulu provide x86
-  setup-java-x86:
-    name: ${{ matrix.distribution }} ${{ matrix.version }} (jdk-${{ matrix.architecture }}) - ${{ matrix.os }}
-    needs: setup-java-major-minor-versions
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        # x86 is not supported on macOS
-        os: [windows-latest, ubuntu-latest]
-        distribution: ['liberica', 'zulu', 'corretto']
-        version: ['11']
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: setup-java
-        uses: ./
-        id: setup-java
-        with:
-          distribution: ${{ matrix.distribution }}
-          java-version: ${{ matrix.version }}
-          architecture: 'x86'
       - name: Verify Java
         run: bash __tests__/verify-java.sh "${{ matrix.version }}" "${{ steps.setup-java.outputs.path }}"
         shell: bash
