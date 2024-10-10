@@ -11,17 +11,19 @@ on:
     paths-ignore:
       - '**.md'
   schedule:
-    - cron: '30 8 * * 2,5'
+    - cron: '30 8 * * 2,4'
   workflow_dispatch:
 jobs:
   setup-java-major-versions:
 #   name: ${{ matrix.distribution }} ${{ matrix.version }} (jdk-x64) - ${{ matrix.os }}
+#   https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners
     name: 01 ${{ matrix.version }} (jdk-x64) - ${{ matrix.os }} ${{ matrix.distribution }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+#       os: [macos-latest, windows-latest, ubuntu-latest]
+        os: [ubuntu-latest, ubuntu-22.04, ubuntu-20.04, windows-latest, windows-2019, macos-latest, macos-13, macos-12, macos-15 ]
         distribution: [ 'sapmachine' ] # internally 'adopt-hotspot' is the same as 'adopt'
         version: ['21', '17', '11', '23']
     steps:
