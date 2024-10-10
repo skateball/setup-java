@@ -108,8 +108,8 @@ jobs:
         with:
           distribution: ${{ matrix.distribution }}
           java-version: |
-            11
             17
+            21
       - name: Verify Java env variables
         run: |
           $versionsArr = "17","21"
