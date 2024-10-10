@@ -21,9 +21,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-13, windows-latest, ubuntu-latest]
-        distribution: [
-            'sapmachine'
-          ] # internally 'adopt-hotspot' is the same as 'adopt'
+        distribution: [ 'sapmachine' ] # internally 'adopt-hotspot' is the same as 'adopt'
         version: ['21', '11', '17']
     steps:
       - name: Checkout
@@ -72,8 +70,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        distribution:
-          ['sapmachine']
+        distribution: ['sapmachine']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -96,8 +93,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        distribution:
-          ['sapmachine']
+        distribution: ['sapmachine']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -134,7 +130,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        version: ['17-ea', '21-ea']
+        version: ['17-ea', '21-ea', '23-ea']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -174,7 +170,7 @@ jobs:
         shell: bash
 
   setup-java-version-both-version-inputs-presents:
-    name: ${{ matrix.distribution }} version (should be from input) - ${{ matrix.os }}
+    name: ig ${{ matrix.distribution }} version (should be from input) - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -203,7 +199,7 @@ jobs:
         shell: bash
 
   setup-java-version-from-file-major-notation:
-    name: ${{ matrix.distribution }} version from file X - ${{ matrix.os }}
+    name: ig ${{ matrix.distribution }} version from file X - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -231,7 +227,7 @@ jobs:
         shell: bash
 
   setup-java-version-from-file-major-minor-patch-notation:
-    name: ${{ matrix.distribution }} version from file X.Y.Z - ${{ matrix.os }}
+    name: ig ${{ matrix.distribution }} version from file X.Y.Z - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -259,7 +255,7 @@ jobs:
         shell: bash
 
   setup-java-version-from-file-major-minor-patch-with-dist:
-    name: ${{ matrix.distribution }} version from file 'openjdk64-17.0.10' - ${{ matrix.os }}
+    name: ig ${{ matrix.distribution }} version from file 'openjdk64-17.0.10' - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
