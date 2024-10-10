@@ -69,7 +69,8 @@ jobs:
   setup-java-major-minor-versions:
 #   name: ${{ matrix.distribution }} ${{ matrix.version }} (jdk-x64) - ${{ matrix.os }}
     name: 02 ${{ matrix.version }} (jdk-x64) - ${{ matrix.os }} ${{ matrix.distribution }}
-    needs: setup-java-major-versions
+#   needs: setup-java-major-versions
+    needs: setup-java-major-versions-jdk-x64
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -96,7 +97,8 @@ jobs:
   setup-java-check-latest:
 #   name: ${{ matrix.distribution }} ${{ matrix.version }} - check-latest flag - ${{ matrix.os }}
     name: 03 ${{ matrix.version }} - check-latest flag - ${{ matrix.os }} ${{ matrix.distribution }}
-    needs: setup-java-major-versions
+#   needs: setup-java-major-versions
+    needs: setup-java-major-versions-jdk-x64
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -121,7 +123,8 @@ jobs:
   setup-java-multiple-jdks:
 #   name: ${{ matrix.distribution }} ${{ matrix.version }} - multiple jdks - ${{ matrix.os }}
     name: 04 ${{ matrix.version }} - multiple jdks - ${{ matrix.os }} ${{ matrix.distribution }}
-    needs: setup-java-major-versions
+#   needs: setup-java-major-versions
+    needs: setup-java-major-versions-jdk-x64
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
