@@ -14,16 +14,43 @@ on:
     - cron: '30 8 * * 2,4'
   workflow_dispatch:
 jobs:
-  setup-java-major-versions:
+  setup-java-major-versions-jdk-x64:
 #   name: ${{ matrix.distribution }} ${{ matrix.version }} (jdk-x64) - ${{ matrix.os }}
 #   https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners
-    name: 01 ${{ matrix.version }} (jdk-x64) - ${{ matrix.os }} ${{ matrix.distribution }}
+#   x86_64: ubuntu-*, windows-*, macos-13, macos-12
+#   aarch64: macos-14, macos-15 (beta)
+    name: 01a ${{ matrix.version }} (jdk-x64) - ${{ matrix.os }} ${{ matrix.distribution }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
 #       os: [macos-latest, windows-latest, ubuntu-latest]
-        os: [ubuntu-latest, ubuntu-22.04, ubuntu-20.04, windows-latest, windows-2019, macos-latest, macos-13, macos-12, macos-15 ]
+        os: [ubuntu-latest, ubuntu-22.04, ubuntu-20.04, windows-latest, windows-2019, macos-13, macos-12 ]
+        distribution: [ 'sapmachine' ] # internally 'adopt-hotspot' is the same as 'adopt'
+        version: ['21', '17', '11', '23']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: setup-java
+        uses: ./
+        id: setup-java
+        with:
+          java-version: ${{ matrix.version }}
+          distribution: ${{ matrix.distribution }}
+      - name: Verify Java
+        run: bash __tests__/verify-java.sh "${{ matrix.version }}" "${{ steps.setup-java.outputs.path }}"
+        shell: bash
+
+  setup-java-major-versions-jdk-aarch64:
+#   name: ${{ matrix.distribution }} ${{ matrix.version }} (jdk-aarch64) - ${{ matrix.os }}
+#   https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners
+    name: 01b ${{ matrix.version }} (jdk-x64) - ${{ matrix.os }} ${{ matrix.distribution }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+#       os: [macos-latest, windows-latest, ubuntu-latest]
+        os: [macos-latest, macos-14, macos-15 ]
         distribution: [ 'sapmachine' ] # internally 'adopt-hotspot' is the same as 'adopt'
         version: ['21', '17', '11', '23']
     steps:
@@ -137,7 +164,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        os: [macos-13, windows-latest, ubuntu-latest]
         version: ['17-ea', '21-ea', '23-ea', '24-ea']
     steps:
       - name: Checkout
@@ -154,13 +181,13 @@ jobs:
 
   setup-java-custom-package-type:
 #   name: ${{ matrix.distribution }} ${{ matrix.version }} (${{ matrix.java-package }}-x64) - ${{ matrix.os }}
-    name:  06 ${{ matrix.version }} (${{ matrix.java-package }}-x64) - ${{ matrix.os }} ${{ matrix.distribution }}
+    name: 06 ${{ matrix.version }} (${{ matrix.java-package }}-x64) - ${{ matrix.os }} ${{ matrix.distribution }}
     needs: setup-java-major-minor-versions
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        os: [macos-13, windows-latest, ubuntu-latest]
         distribution: ['sapmachine']
         java-package: ['jre']
         version: ['17.0']
