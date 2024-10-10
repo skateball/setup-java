@@ -1,4 +1,4 @@
-name: Validate Java e2e
+name: Validate SapMachine e2e
 
 on:
   push:
