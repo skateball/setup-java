@@ -206,7 +206,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        distribution: ['temurin', 'zulu', 'liberica', 'microsoft', 'corretto']
+#       distribution: ['temurin', 'zulu', 'liberica', 'microsoft', 'corretto']
+        distribution: ['sapmachine']
         java-version-file: ['.java-version', '.tool-versions']
     steps:
       - name: Checkout
@@ -234,7 +235,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        distribution: ['adopt', 'adopt-openj9', 'zulu']
+#       distribution: ['adopt', 'adopt-openj9', 'zulu']
+        distribution: ['sapmachine']
         java-version-file: ['.java-version', '.tool-versions']
     steps:
       - name: Checkout
@@ -262,7 +264,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        distribution: ['adopt', 'zulu', 'liberica']
+#       distribution: ['adopt', 'zulu', 'liberica']
+        distribution: ['sapmachine']
         java-version-file: ['.java-version', '.tool-versions']
     steps:
       - name: Checkout
