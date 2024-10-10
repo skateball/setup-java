@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-13, windows-latest, ubuntu-latest]
+        os: [macos-latest, windows-latest, ubuntu-latest]
         distribution: [ 'sapmachine' ] # internally 'adopt-hotspot' is the same as 'adopt'
         version: ['21', '11', '17']
     steps:
@@ -46,9 +46,9 @@ jobs:
         os: [macos-latest, windows-latest, ubuntu-latest]
         distribution: ['sapmachine']
         version:
-          - '11.0.24'
           - '21.0.4'
           - '17.0.12'
+          - '11.0.24'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -151,7 +151,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-13, windows-latest, ubuntu-latest]
+        os: [macos-latest, windows-latest, ubuntu-latest]
         distribution: ['sapmachine']
         java-package: ['jre']
         version: ['17.0']
@@ -176,7 +176,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        distribution: ['temurin', 'microsoft', 'corretto']
+#       distribution: ['temurin', 'microsoft', 'corretto']
+        distribution: ['sapmachine']
         java-version-file: ['.java-version', '.tool-versions']
     steps:
       - name: Checkout
