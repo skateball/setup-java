@@ -11,18 +11,19 @@ on:
     paths-ignore:
       - '**.md'
   schedule:
-    - cron: '0 */12 * * *'
+    - cron: '30 8 * * 2,5'
   workflow_dispatch:
 jobs:
   setup-java-major-versions:
-    name: ${{ matrix.distribution }} ${{ matrix.version }} (jdk-x64) - ${{ matrix.os }}
+#   name: ${{ matrix.distribution }} ${{ matrix.version }} (jdk-x64) - ${{ matrix.os }}
+    name: 01 ${{ matrix.version }} (jdk-x64) - ${{ matrix.os }} ${{ matrix.distribution }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
         distribution: [ 'sapmachine' ] # internally 'adopt-hotspot' is the same as 'adopt'
-        version: ['21', '11', '17']
+        version: ['21', '17', '11', '23']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,7 +38,8 @@ jobs:
         shell: bash
 
   setup-java-major-minor-versions:
-    name: ${{ matrix.distribution }} ${{ matrix.version }} (jdk-x64) - ${{ matrix.os }}
+#   name: ${{ matrix.distribution }} ${{ matrix.version }} (jdk-x64) - ${{ matrix.os }}
+    name: 02 ${{ matrix.version }} (jdk-x64) - ${{ matrix.os }} ${{ matrix.distribution }}
     needs: setup-java-major-versions
     runs-on: ${{ matrix.os }}
     strategy:
@@ -63,7 +65,8 @@ jobs:
         shell: bash
 
   setup-java-check-latest:
-    name: ${{ matrix.distribution }} ${{ matrix.version }} - check-latest flag - ${{ matrix.os }}
+#   name: ${{ matrix.distribution }} ${{ matrix.version }} - check-latest flag - ${{ matrix.os }}
+    name: 03 ${{ matrix.version }} - check-latest flag - ${{ matrix.os }} ${{ matrix.distribution }}
     needs: setup-java-major-versions
     runs-on: ${{ matrix.os }}
     strategy:
@@ -71,6 +74,7 @@ jobs:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
         distribution: ['sapmachine']
+        version: ['21', '17', '11', '23']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -79,14 +83,15 @@ jobs:
         id: setup-java
         with:
           distribution: ${{ matrix.distribution }}
-          java-version: 11
+          java-version: ${{ matrix.version }}
           check-latest: true
       - name: Verify Java
-        run: bash __tests__/verify-java.sh "11" "${{ steps.setup-java.outputs.path }}"
+        run: bash __tests__/verify-java.sh ${{ matrix.version }} "${{ steps.setup-java.outputs.path }}"
         shell: bash
 
   setup-java-multiple-jdks:
-    name: ${{ matrix.distribution }} ${{ matrix.version }} - multiple jdks - ${{ matrix.os }}
+#   name: ${{ matrix.distribution }} ${{ matrix.version }} - multiple jdks - ${{ matrix.os }}
+    name: 04 ${{ matrix.version }} - multiple jdks - ${{ matrix.os }} ${{ matrix.distribution }}
     needs: setup-java-major-versions
     runs-on: ${{ matrix.os }}
     strategy:
@@ -107,7 +112,7 @@ jobs:
             17
       - name: Verify Java env variables
         run: |
-          $versionsArr = "11","17"
+          $versionsArr = "17","21"
           foreach ($version in $versionsArr)
           {
             $envName = "JAVA_HOME_${version}_${env:RUNNER_ARCH}"
@@ -119,18 +124,19 @@ jobs:
           }
         shell: pwsh
       - name: Verify Java
-        run: bash __tests__/verify-java.sh "17" "${{ steps.setup-java.outputs.path }}"
+        run: bash __tests__/verify-java.sh "21" "${{ steps.setup-java.outputs.path }}"
         shell: bash
 
   setup-java-ea-versions-sapmachine:
-    name: sapmachine ${{ matrix.version }} (jdk-x64) - ${{ matrix.os }}
+#   name: sapmachine ${{ matrix.version }} (jdk-x64) - ${{ matrix.os }}
+    name: 05 ${{ matrix.version }} (jdk-x64) - ${{ matrix.os }} sapmachine
     needs: setup-java-major-minor-versions
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        version: ['17-ea', '21-ea', '23-ea']
+        version: ['17-ea', '21-ea', '23-ea', '24-ea']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -145,7 +151,8 @@ jobs:
         shell: bash
 
   setup-java-custom-package-type:
-    name: ${{ matrix.distribution }} ${{ matrix.version }} (${{ matrix.java-package }}-x64) - ${{ matrix.os }}
+#   name: ${{ matrix.distribution }} ${{ matrix.version }} (${{ matrix.java-package }}-x64) - ${{ matrix.os }}
+    name:  06 ${{ matrix.version }} (${{ matrix.java-package }}-x64) - ${{ matrix.os }} ${{ matrix.distribution }}
     needs: setup-java-major-minor-versions
     runs-on: ${{ matrix.os }}
     strategy:
@@ -170,7 +177,8 @@ jobs:
         shell: bash
 
   setup-java-version-both-version-inputs-presents:
-    name: ig ${{ matrix.distribution }} version (should be from input) - ${{ matrix.os }}
+#   name: ig ${{ matrix.distribution }} version (should be from input) - ${{ matrix.os }}
+    name: 07 version (should be from input) - ${{ matrix.os }} ${{ matrix.distribution }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -200,7 +208,8 @@ jobs:
         shell: bash
 
   setup-java-version-from-file-major-notation:
-    name: ig ${{ matrix.distribution }} version from file X - ${{ matrix.os }}
+#   name: ig ${{ matrix.distribution }} version from file X - ${{ matrix.os }}
+    name: 08 version from file X - ${{ matrix.os }} ${{ matrix.distribution }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -214,10 +223,10 @@ jobs:
         uses: actions/checkout@v4
       - name: Create .java-version file
         shell: bash
-        run: echo "11" > .java-version
+        run: echo "21" > .java-version
       - name: Create .tool-versions file
         shell: bash
-        run: echo "java 11" > .tool-versions
+        run: echo "java 21" > .tool-versions
       - name: setup-java
         uses: ./
         id: setup-java
@@ -225,11 +234,12 @@ jobs:
           distribution: ${{ matrix.distribution }}
           java-version-file: ${{matrix.java-version-file }}
       - name: Verify Java
-        run: bash __tests__/verify-java.sh "11" "${{ steps.setup-java.outputs.path }}"
+        run: bash __tests__/verify-java.sh "21" "${{ steps.setup-java.outputs.path }}"
         shell: bash
 
   setup-java-version-from-file-major-minor-patch-notation:
-    name: ig ${{ matrix.distribution }} version from file X.Y.Z - ${{ matrix.os }}
+#   name: ig ${{ matrix.distribution }} version from file X.Y.Z - ${{ matrix.os }}
+    name: 09 version from file X.Y.Z - ${{ matrix.os }} ${{ matrix.distribution }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -243,10 +253,10 @@ jobs:
         uses: actions/checkout@v4
       - name: Create .java-version file
         shell: bash
-        run: echo "17.0.10" > .java-version
+        run: echo "17.0.12" > .java-version
       - name: Create .tool-versions file
         shell: bash
-        run: echo "java 17.0.10" > .tool-versions
+        run: echo "java 17.0.12" > .tool-versions
       - name: setup-java
         uses: ./
         id: setup-java
@@ -254,11 +264,12 @@ jobs:
           distribution: ${{ matrix.distribution }}
           java-version-file: ${{matrix.java-version-file }}
       - name: Verify Java
-        run: bash __tests__/verify-java.sh "17.0.10" "${{ steps.setup-java.outputs.path }}"
+        run: bash __tests__/verify-java.sh "17.0.12" "${{ steps.setup-java.outputs.path }}"
         shell: bash
 
   setup-java-version-from-file-major-minor-patch-with-dist:
-    name: ig ${{ matrix.distribution }} version from file 'openjdk64-17.0.10' - ${{ matrix.os }}
+#   name: ig ${{ matrix.distribution }} version from file 'openjdk64-17.0.10' - ${{ matrix.os }}
+    name: 10 version from file 'openjdk64-17.0.12' - ${{ matrix.os }} ${{ matrix.distribution }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -272,10 +283,10 @@ jobs:
         uses: actions/checkout@v4
       - name: Create .java-version file
         shell: bash
-        run: echo "openjdk64-17.0.10" > .java-version
+        run: echo "openjdk64-17.0.12" > .java-version
       - name: Create .tool-versions file
         shell: bash
-        run: echo "java openjdk64-17.0.10" > .tool-versions
+        run: echo "java openjdk64-17.0.12" > .tool-versions
       - name: setup-java
         uses: ./
         id: setup-java
@@ -283,5 +294,5 @@ jobs:
           distribution: ${{ matrix.distribution }}
           java-version-file: ${{matrix.java-version-file }}
       - name: Verify Java
-        run: bash __tests__/verify-java.sh "17.0.10" "${{ steps.setup-java.outputs.path }}"
+        run: bash __tests__/verify-java.sh "17.0.12" "${{ steps.setup-java.outputs.path }}"
         shell: bash
