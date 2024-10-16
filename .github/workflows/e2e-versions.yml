@@ -16,9 +16,9 @@ on:
 
 env:
   GLOBAL_LATEST_STR: "23.0.1"
-  GLOBAL_LATEST_21: "21.0.5"
-  GLOBAL_LATEST_17: "17.0.13"
-  GLOBAL_LATEST_11: "11.0.25"
+  GLOBAL_LATEST_21: "5"
+  GLOBAL_LATEST_17: "13"
+  GLOBAL_LATEST_11: "25"
 
 jobs:
   setup-java-major-versions-jdk-x64:
@@ -163,7 +163,7 @@ jobs:
           }
         shell: pwsh
       - name: Verify Java
-        run: bash __tests__/verify-java.sh "$GLOBAL_LATEST_21" "${{ steps.setup-java.outputs.path }}"
+        run: bash __tests__/verify-java.sh "21.0.5" "${{ steps.setup-java.outputs.path }}"
         shell: bash
 
   setup-java-ea-versions-sapmachine:
@@ -292,10 +292,10 @@ jobs:
         uses: actions/checkout@v4
       - name: Create .java-version file
         shell: bash
-        run: echo "$GLOBAL_LATEST_17" > .java-version
+        run: echo "17.0.13" > .java-version
       - name: Create .tool-versions file
         shell: bash
-        run: echo "java $GLOBAL_LATEST_17" > .tool-versions
+        run: echo "java 17.0.13" > .tool-versions
       - name: setup-java
         uses: ./
         id: setup-java
@@ -303,12 +303,12 @@ jobs:
           distribution: ${{ matrix.distribution }}
           java-version-file: ${{matrix.java-version-file }}
       - name: Verify Java
-        run: bash __tests__/verify-java.sh "$GLOBAL_LATEST_17" "${{ steps.setup-java.outputs.path }}"
+        run: bash __tests__/verify-java.sh "17.0.13" "${{ steps.setup-java.outputs.path }}"
         shell: bash
 
   setup-java-version-from-file-major-minor-patch-with-dist:
 #   name: ig ${{ matrix.distribution }} version from file 'openjdk64-17.0.10' - ${{ matrix.os }}
-    name: 10 version from file 'openjdk64-17.0.12' - ${{ matrix.os }} ${{ matrix.distribution }}
+    name: 10 version from file 'openjdk64-17.0.13' - ${{ matrix.os }} ${{ matrix.distribution }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -322,10 +322,10 @@ jobs:
         uses: actions/checkout@v4
       - name: Create .java-version file
         shell: bash
-        run: echo "openjdk64-$GLOBAL_LATEST_17" > .java-version
+        run: echo "openjdk64-17.0.13" > .java-version
       - name: Create .tool-versions file
         shell: bash
-        run: echo "java openjdk64-$GLOBAL_LATEST_17" > .tool-versions
+        run: echo "java openjdk64-17.0.13" > .tool-versions
       - name: setup-java
         uses: ./
         id: setup-java
