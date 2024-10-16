@@ -78,9 +78,9 @@ jobs:
         os: [macos-latest, windows-latest, ubuntu-latest]
         distribution: ['sapmachine']
         version:
-          - '21.0.4'
-          - '17.0.12'
-          - '11.0.24'
+          - '21.0.5'
+          - '17.0.13'
+          - '11.0.25'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -156,7 +156,7 @@ jobs:
           }
         shell: pwsh
       - name: Verify Java
-        run: bash __tests__/verify-java.sh "21" "${{ steps.setup-java.outputs.path }}"
+        run: bash __tests__/verify-java.sh "21.0.5" "${{ steps.setup-java.outputs.path }}"
         shell: bash
 
   setup-java-ea-versions-sapmachine:
