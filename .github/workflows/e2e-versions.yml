@@ -273,7 +273,7 @@ jobs:
           distribution: ${{ matrix.distribution }}
           java-version-file: ${{matrix.java-version-file }}
       - name: Verify Java
-        run: bash __tests__/verify-java.sh "${{ GLOBAL_LATEST_21 }}" "${{ steps.setup-java.outputs.path }}"
+        run: bash __tests__/verify-java.sh ${{ GLOBAL_LATEST_21 }} "${{ steps.setup-java.outputs.path }}"
         shell: bash
 
   setup-java-version-from-file-major-minor-patch-notation:
@@ -333,5 +333,5 @@ jobs:
           distribution: ${{ matrix.distribution }}
           java-version-file: ${{matrix.java-version-file }}
       - name: Verify Java
-        run: bash __tests__/verify-java.sh "${{ GLOBAL_LATEST_17 }}" "${{ steps.setup-java.outputs.path }}"
+        run: bash __tests__/verify-java.sh ${{ GLOBAL_LATEST_17 }} "${{ steps.setup-java.outputs.path }}"
         shell: bash
